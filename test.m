@@ -22,11 +22,11 @@ ylabel('y')
 
 %models (linear, quadratic, cubic,...)
 fun1 = @(x,xdata)x(1)+x(2)*xdata.^1; 
-fun2 = @(x,xdata)x(1)+x(2)*xdata.^2; 
-fun3 = @(x,xdata)x(1)+x(2)*xdata.^3; 
-fun4 = @(x,xdata)x(1)+x(2)*xdata.^4; 
+fun2 = @(x,xdata)x(1)+x(2)*xdata.^1+x(3)*xdata.^2; 
+fun3 = @(x,xdata)x(1)+x(2)*xdata.^1+x(3)*xdata.^2+x(4)*xdata.^3; 
+fun4 = @(x,xdata)x(1)+x(2)*xdata.^1+x(3)*xdata.^2+x(4)*xdata.^3+x(5)*xdata.^4; 
 
-x0 = [1,1,1,1]; % start parameters, amount results in polynom length
+x0 = [1,1,1,1,1]; % start parameters, amount results in polynom length
 % LS fitting
 ls1 = lsqcurvefit(fun1,x0,x,yn)
 ls2 = lsqcurvefit(fun2,x0,x,yn)
