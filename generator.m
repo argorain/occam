@@ -19,6 +19,9 @@ x = [-10:0.2:10];
 % filename
 filename = '2D_3';
 
+% std deviation
+sigma = 10;
+
 fprintf('Generating data...\n');
 
 %% Generate data
@@ -31,10 +34,11 @@ YN = Y;
 
 for n = [2:dim]
     Y(n,:) = polyval(p(n-1,:), x);
+    
+    % add noise
+    noise = sigma*randn(1,length(x));
+    YN(2:end, :) = Y(n, :) + noise;
 end
-
-% add noise
-YN(2:end,:) = awgn(Y(2:end,:), noise,'measured');
 
 % store data
 csvwrite(strcat('data_',filename,'.csv'),Y);
