@@ -4,9 +4,10 @@ clc
 
 disp('Occams razor model selector');
 %% Set parameters
-dataFile = 'data_3D_3'; % data file name
-model_3D;               % model file name
-dimension = 3;          % space dimension
+dataFile = 'data_2D_3'; % data file name
+model_2D;               % model file name
+dimension = 2;          % space dimension
+compensation_exp=1;     % exponent of compensation, 1 for linear, 2 for quadratic, 3 for cubic...
 
 %% Load data
 disp('Loading data...')
@@ -65,6 +66,7 @@ end
 % normaize
 wmax = max(w);
 w = w./wmax;
+w = w.^compensation_exp;
 
 % compensate
 Po = P;
