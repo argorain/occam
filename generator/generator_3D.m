@@ -6,8 +6,8 @@ clc
 %% Set generator parameters
 
 % data polynom, line per dimension
-p3 = [2, 3, 5; 
-     4, -1, 0];   % 3D example
+p3 = [20, 3, 5; 
+     4, 10, 10];   % 3D example
 p = p3;
 
 % x-timeline
@@ -38,8 +38,8 @@ noise = sigma*randn(length(y),length(x));
 ZN = Z + noise;
 
 % store data
-csvwrite(strcat('data_',filename,'_in.csv'),[x;y]);
-csvwrite(strcat('data_',filename,'.csv'),Z);
-csvwrite(strcat('data_',filename,'_n.csv'),ZN);
+csvwrite(strcat('../data_',filename,'_in.csv'),[x;y]);
+csvwrite(strcat('../data_',filename,'.csv'),Z);
+csvwrite(strcat('../data_',filename,'_n.csv'),ZN);
 
 fprintf('Generation done.\n');

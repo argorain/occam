@@ -5,7 +5,7 @@ clc
 %% Set generator parameters
 
 % data polynom, line per dimension
-p2 = [2, 5, 10]; % 2D example
+p2 = [-1 1 -1 1 -1]; % 2D example
 p = p2;
 
 % x-timeline
@@ -15,7 +15,7 @@ x = [-10:0.2:10];
 filename = '2D_3';
 
 % std deviation
-sigma = 10;
+sigma = 1000;
 
 fprintf('Generating data...\n');
 
@@ -36,7 +36,7 @@ for n = [2:dim]
 end
 
 % store data
-csvwrite(strcat('data_',filename,'.csv'),Y);
-csvwrite(strcat('data_',filename,'_n.csv'),YN);
+csvwrite(strcat('../data_',filename,'.csv'),Y);
+csvwrite(strcat('../data_',filename,'_n.csv'),YN);
 
 fprintf('Generation done.\n');

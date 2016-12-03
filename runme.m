@@ -2,6 +2,10 @@ clear all
 close all
 clc
 
+addpath('fun');
+addpath('model');
+addpath('generator');
+
 disp('Occams razor model selector');
 %% Set parameters
 dataFile = 'data_2D_3'; % data file name
@@ -16,8 +20,6 @@ noise = csvread(strcat(dataFile,'_n.csv'));
 if dimension > 2
     in_data=csvread(strcat(dataFile,'_in.csv'));
 end
-
-addpath('fun');
 
 %% Model fitting (Least square)
 disp('Model  fitting...')
