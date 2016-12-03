@@ -7,11 +7,8 @@ clc
 
 % data polynom, line per dimension
 p3 = [2, 3, 5; 
-     4, 0, 0];   % 3D example
+     4, -1, 0];   % 3D example
 p = p3;
- 
-% Noise added to data at dB
-noise = 10; 
 
 % x-timeline
 x = [-10:0.2:10];
@@ -23,7 +20,7 @@ y = [-10:0.2:10];
 filename = '3D_3';
 
 % std deviation
-sigma = 10;
+sigma = 10000;
 
 fprintf('Generating data...\n');
 

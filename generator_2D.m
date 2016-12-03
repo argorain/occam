@@ -7,9 +7,6 @@ clc
 % data polynom, line per dimension
 p2 = [2, 5, 10]; % 2D example
 p = p2;
- 
-% Noise added to data at dB
-noise = 10; 
 
 % x-timeline
 x = [-10:0.2:10];
