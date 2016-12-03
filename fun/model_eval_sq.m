@@ -6,3 +6,4 @@ function [squares] = model_eval_sq(params,model,in_data,out_data)
         sq = sum(sq);
     end
     squares = sq;
+end
