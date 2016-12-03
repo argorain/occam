@@ -6,7 +6,6 @@ clc
 %% Set generator parameters
 
 % data polynom, line per dimension
-p2 = [2, 5, 10]; % 2D example
 p3 = [2, 3, 5; 
      4, 0, 0];   % 3D example
 p = p3;

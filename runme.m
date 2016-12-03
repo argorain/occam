@@ -14,6 +14,7 @@ if dimension > 2
     in_data=csvread(strcat(dataFile,'_in.csv'));
 end
 
+addpath('fun');
 %% Show data
 % TODO: expand for another dimensions, not only 3D
 if dimension == 2
