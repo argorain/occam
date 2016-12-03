@@ -42,10 +42,10 @@ disp('Maximum Likelihood evaluation...')
 
 n = length(noise(1,:));
 P = zeros(length(model), 1);
-% simple ML estimator for 2D
+
 % smallest one is best fitting
 for i = [1:length(model)]
-    fn = model{i};
+    fn = model{i,1};
     if dimension == 2
         P(i) = 1/n * sum((fn(ls{i},noise(1,:)) - noise(2,:)).^2);
     else
@@ -56,11 +56,29 @@ for i = [1:length(model)]
     fprintf('P(%d) = %f\n', i, P(i))
 end
 
+% Compensate model dimensionality (smaller dimensions are better, smaller P is better)
+w = zeros(1, length(model));
+% load dimensions of models
+for i = [1:length(model)]
+    w(i) = model{i,2};
+end
+% normaize
+wmax = max(w);
+w = w./wmax;
+
+% compensate
+Po = P;
+P = P .* w';
+
+% Select best match
+[val, pos] = min(P);
+fn = model{pos,1};
+
 %% Show data
 % TODO: expand for another dimensions, not only 3D
+disp('')
 disp('Results')
-[val, pos] = min(P);
-fn = model{pos};
+disp('=======')
 fprintf('Selected model #%d\n', pos)
 fprintf('Parameters')
 ls{pos}
