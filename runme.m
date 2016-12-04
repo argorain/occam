@@ -8,9 +8,13 @@ addpath('generator');
 
 disp('Occams razor model selector');
 %% Set parameters
-dataFile = 'data_2D_3'; % data file name
-model_2D;               % model file name
 dimension = 2;          % space dimension
+dataFile = ['data_' sprintf('%d',dimension) 'D_3']; % data file name
+if dimension == 3
+    model_3D;               % model file name
+else
+    model_2D;
+end
 compensation_exp=1;     % exponent of compensation, 1 for linear, 2 for quadratic, 3 for cubic...
 
 %% Load data
@@ -86,6 +90,8 @@ disp('=======')
 fprintf('Selected model #%d\n', pos)
 fprintf('Parameters')
 ls{pos}
+vys_rovnice = model{pos,3};
+fprintf('Equation: f(%s) = \n %s\n',promenne, vys_rovnice(ls{pos}));
 
 if dimension == 2
     figure;
