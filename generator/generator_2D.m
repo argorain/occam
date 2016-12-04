@@ -20,23 +20,24 @@ sigma = 1000;
 fprintf('Generating data...\n');
 
 %% Generate data
-[dim,h] = size(p);
-dim = dim + 1; % y-dimensions + x-dimension
+%[dim,h] = size(p);
+%dim = dim + 1; % y-dimensions + x-dimension
 
-Y = zeros(dim, length(x));
-Y(1,:) = x;
+Y = zeros(1, length(x));
+%Y(1,:) = x;
 YN = Y;
 
-for n = [2:dim]
-    Y(n,:) = polyval(p(n-1,:), x);
+n = 1;
+Y(n,:) = polyval(p(n,:), x);
     
-    % add noise
-    noise = sigma*randn(1,length(x));
-    YN(2:end, :) = Y(n, :) + noise;
-end
+% add noise
+noise = sigma*randn(1,length(x));
+YN(n, :) = Y(n, :) + noise;
+
 
 % store data
-csvwrite(strcat('../data_',filename,'.csv'),Y);
-csvwrite(strcat('../data_',filename,'_n.csv'),YN);
+csvwrite(strcat('data_',filename,'.csv'),Y);
+csvwrite(strcat('data_',filename,'_n.csv'),YN);
+csvwrite(strcat('data_',filename,'_in.csv'),x);
 
 fprintf('Generation done.\n');

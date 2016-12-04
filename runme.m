@@ -8,7 +8,7 @@ addpath('generator');
 
 disp('Occams razor model selector');
 %% Set parameters
-dimension = 2;          % space dimension
+dimension = 3;          % space dimension
 dataFile = ['data_' sprintf('%d',dimension) 'D_3']; % data file name
 if dimension == 3
     model_3D;               % model file name
@@ -21,9 +21,7 @@ compensation_exp=1;     % exponent of compensation, 1 for linear, 2 for quadrati
 disp('Loading data...')
 data = csvread(strcat(dataFile,'.csv'));
 noise = csvread(strcat(dataFile,'_n.csv'));
-if dimension > 2
-    in_data=csvread(strcat(dataFile,'_in.csv'));
-end
+in_data=csvread(strcat(dataFile,'_in.csv'));
 
 %% Model fitting (Least square)
 disp('Model  fitting...')
@@ -32,13 +30,8 @@ ls = cell(length(model), 1);
 for i = [1:length(model)]
     fn = model{i};
     x0 = ones(1,model{i,2});
-    
-    % LS fitting
-    if dimension == 2
-        ls(i) = {solve_lsq(fn,x0,noise(1,:),noise(2,:))};        
-    else
-        ls(i) = {solve_lsq(fn,x0,in_data,noise)};
-    end
+    ls(i) = {solve_lsq(fn,x0,in_data,noise)};
+   
     % plot of results
     %plot(noise(1,:),fn(ls(i,:),noise(1,:)), '-black')
 end
@@ -54,7 +47,7 @@ P = zeros(length(model), 1);
 for i = [1:length(model)]
     fn = model{i,1};
     if dimension == 2
-        P(i) = 1/n * sum((fn(ls{i},noise(1,:)) - noise(2,:)).^2);
+        P(i) = 1/n * sum((fn(ls{i},in_data) - noise).^2);
     else
         P(i) = model_eval_sq(ls{i},fn,in_data, noise);
     end
@@ -96,9 +89,9 @@ fprintf('Equation: f(%s) = \n %s\n',promenne, vys_rovnice(ls{pos}));
 if dimension == 2
     figure;
     hold on;
-    %plot(data(1,:), data(2,:), '.r')   
-    plot(noise(1,:), noise(2,:), '.b')
-    plot(noise(1,:),fn(ls{pos},noise(1,:)), '-black')
+    %plot(in_data, data, '.r')   
+    plot(in_data, noise, '.b')
+    plot(in_data,fn(ls{pos},in_data), '-r')
     grid on;
     title('Model fitting, 2D data')
     xlabel('x')
@@ -108,7 +101,7 @@ elseif dimension == 3
     hold on;
     %plot3(repmat(in_data(1,:),size(in_data,2),1), repmat(in_data(2,:),size(in_data,2),1)', data, '.r')  
     plot3(repmat(in_data(1,:),size(in_data,2),1), repmat(in_data(2,:),size(in_data,2),1)', noise, '.b')
-    plot3(repmat(in_data(1,:),size(in_data,2),1), repmat(in_data(2,:),size(in_data,2),1)', fn(ls{pos},in_data), '-k')
+    plot3(repmat(in_data(1,:),size(in_data,2),1), repmat(in_data(2,:),size(in_data,2),1)', fn(ls{pos},in_data), '-r')
     grid on;
     title('Model fitting, 3D data')
     xlabel('x')
