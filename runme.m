@@ -15,15 +15,21 @@ if dimension == 3
 else
     model_2D;
 end
-compensation_exp=1;     % exponent of compensation, 1 for linear, 2 for quadratic, 3 for cubic...
+compensation_exp = 0;     % exponent of compensation, 1 for linear, 2 for quadratic, 3 for cubic...
+sigmaAvail = 1;         % Sigma is known
 
 %% Load data
 disp('Loading data...')
 data = csvread(strcat(dataFile,'.csv'));
 noise = csvread(strcat(dataFile,'_n.csv'));
 in_data=csvread(strcat(dataFile,'_in.csv'));
+if sigmaAvail ==1
+    sigma=csvread(strcat(dataFile,'_sigma.csv'));
+end
 
-%% Model fitting (Least square)
+%% Model fitting - Maximum Likelihood (Least square)
+% https://onlinecourses.science.psu.edu/stat414/node/191
+
 disp('Model  fitting...')
 
 ls = cell(length(model), 1);
@@ -36,18 +42,28 @@ for i = [1:length(model)]
     %plot(noise(1,:),fn(ls(i,:),noise(1,:)), '-black')
 end
 
-%% Maximum Likelihood
-% https://onlinecourses.science.psu.edu/stat414/node/191
-disp('Maximum Likelihood evaluation...')
+%% Classification
+
+disp('Classification...')
 
 n = length(noise(1,:));
 P = zeros(length(model), 1);
+
+N = 2*n;
+d = dimension;
+if sigmaAvail == 1
+   % sigma is known    
+   EresD = sigma*sqrt(1-d/N)
+else
+    
+end
 
 % smallest one is best fitting
 for i = [1:length(model)]
     fn = model{i,1};
     if dimension == 2
-        P(i) = 1/n * sum((fn(ls{i},in_data) - noise).^2);
+        %P(i) = 1/n * sum((fn(ls{i},in_data) - noise).^2);
+        P(i) = sqrt(1/n * sum(((fn(ls{i},in_data) - noise).^2)/N));
     else
         P(i) = model_eval_sq(ls{i},fn,in_data, noise);
     end

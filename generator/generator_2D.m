@@ -34,10 +34,14 @@ Y(n,:) = polyval(p(n,:), x);
 noise = sigma*randn(1,length(x));
 YN(n, :) = Y(n, :) + noise;
 
+m = mean(YN);
+var = sum((YN-m).^2)/length(YN);
+sigma = sqrt(var);
 
 % store data
 csvwrite(strcat('data_',filename,'.csv'),Y);
 csvwrite(strcat('data_',filename,'_n.csv'),YN);
 csvwrite(strcat('data_',filename,'_in.csv'),x);
+csvwrite(strcat('data_',filename,'_sigma.csv'),sigma);
 
 fprintf('Generation done.\n');
