@@ -8,7 +8,7 @@ addpath('generator');
 
 disp('Occams razor model selector');
 %% Set parameters
-dimension = 3;          % space dimension
+dimension = 2;          % space dimension
 dataFile = ['data_' sprintf('%d',dimension) 'D_3']; % data file name
 if dimension == 3
     model_3D;               % model file name
@@ -61,12 +61,12 @@ end
 % smallest one is best fitting
 for i = [1:length(model)]
     fn = model{i,1};
-    if dimension == 2
+    %if dimension == 2
         %P(i) = 1/n * sum((fn(ls{i},in_data) - noise).^2);
-        P(i) = sqrt(1/n * sum(((fn(ls{i},in_data) - noise).^2)/N));
-    else
+    %    P(i) = sqrt(1/n * sum(((fn(ls{i},in_data) - noise).^2)/N));
+    %else
         P(i) = model_eval_sq(ls{i},fn,in_data, noise);
-    end
+    %end
     
     % show them
     fprintf('P(%d) = %f\n', i, P(i))
