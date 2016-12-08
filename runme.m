@@ -8,7 +8,7 @@ addpath('generator');
 
 disp('Occams razor model selector');
 %% Set parameters
-dimension = 2;          % space dimension
+dimension = 3;          % space dimension
 dataFile = ['data_' sprintf('%d',dimension) 'D_3']; % data file name
 if dimension == 3
     model_3D;               % model file name
@@ -16,7 +16,7 @@ else
     model_2D;
 end
 compensation_exp = 1;     % exponent of compensation, 1 for linear, 2 for quadratic, 3 for cubic...
-sigmaAvail = 0;         % Sigma is known
+sigmaAvail = 1;         % Sigma is known
 treshold=0.1;           % Treshold percentage (0-1.0) ~ 0-100%
 
 %% Load data
@@ -98,15 +98,15 @@ Eres1 = Eres .* w';
 % METHOD 2
 if sigmaAvail == 1
     for i = [1:length(model)]
+        posL(2) = i;
         if Eres(i)<EresData(i)*(1-treshold)
-            posL(2) = i;
             break; 
         end
     end
 else
     for i=[1:length(model)-1]
+        posL(2) = i;
         if sigmaEst(i)<sigmaEst(i+1)*(1+treshold)
-            posL(2) = i;
             break;
         end
     end
