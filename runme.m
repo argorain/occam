@@ -16,7 +16,7 @@ else
     model_2D;
 end
 compensation_exp = 1;     % exponent of compensation, 1 for linear, 2 for quadratic, 3 for cubic...
-sigmaAvail = 1;         % Sigma is known
+sigmaAvail = 0;         % Sigma is known
 treshold=0.1;           % Treshold percentage (0-1.0) ~ 0-100%
 
 %% Load data
@@ -50,6 +50,7 @@ disp('Classification...')
 n = length(noise(1,:));
 Eres = zeros(length(model), 1);
 EresData = zeros(length(model), 1);
+sigmaEst = zeros(length(model), 1);
 
 N = 2*n;
 
@@ -66,7 +67,8 @@ for i = [1:length(model)]
         EresData(i) = sigma*sqrt(1-d/N);
         fprintf('\nEresData(%d) = %f\n',i, EresData(i));
     else
-    
+        sigmaEst(i) = sqrt((Eres(i)^2)/(1-d/N));
+        fprintf('SigmaEst(%d) = %f\n', i, sigmaEst(i))
     end
     
     % show them
@@ -94,13 +96,21 @@ Eres1 = Eres .* w';
 [val, posL(1)] = min(Eres1);
 
 % METHOD 2
-for i = [1:length(model)]
-    if Eres(i)<EresData(i)*(1-treshold)
-        posL(2) = i;
-        break; 
+if sigmaAvail == 1
+    for i = [1:length(model)]
+        if Eres(i)<EresData(i)*(1-treshold)
+            posL(2) = i;
+            break; 
+        end
+    end
+else
+    for i=[1:length(model)-1]
+        if sigmaEst(i)<sigmaEst(i+1)*(1+treshold)
+            posL(2) = i;
+            break;
+        end
     end
 end
-
 %% Show data
 % TODO: expand for another dimensions, not only 3D
 for i=[1,2]
