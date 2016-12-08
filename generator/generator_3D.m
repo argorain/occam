@@ -37,9 +37,9 @@ Z = polyval(p(2,:), y)'*polyval(p(1,:), x);
 noise = sigma*randn(length(y),length(x));
 ZN = Z + noise;
 
-m = mean(mean(ZN));
-var = sum(sum((ZN-m).^2))/length(ZN);
-sigma = sqrt(var);
+%m = mean(mean(ZN));
+%var = sum(sum((ZN-m).^2))/length(ZN);
+%sigma = sqrt(var);
 
 % store data
 csvwrite(strcat('data_',filename,'_in.csv'),[x;y]);

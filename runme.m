@@ -8,7 +8,7 @@ addpath('generator');
 
 disp('Occams razor model selector');
 %% Set parameters
-dimension = 2;          % space dimension
+dimension = 3;          % space dimension
 dataFile = ['data_' sprintf('%d',dimension) 'D_3']; % data file name
 if dimension == 3
     model_3D;               % model file name
@@ -55,15 +55,16 @@ N = 2*n;
 for i = [1:length(model)]
     fn = model{i,1};
     %if dimension == 2
-        P(i) = sqrt(sum((fn(ls{i},in_data)-noise).^2)/n);
+        %P(i) = sqrt(sum((fn(ls{i},in_data)-noise).^2)/n);
         %P(i) = (1/n * sum(sqrt(((fn(ls{i},in_data) - noise).^2)/N)));
     %else
-       % P(i) = model_eval_sq(ls{i},fn,in_data, noise);
+        P(i) = model_eval_sq(ls{i},fn,in_data, noise);
     %end
     d = model{i,2};
     if sigmaAvail == 1
         % sigma is known    
-        EresD = sigma*sqrt(1-d/N)
+        EresD = sigma*sqrt(1-d/N);
+        fprintf('\nEres = %f\n', EresD);
     else
     
     end
