@@ -8,15 +8,16 @@ addpath('generator');
 
 disp('Occams razor model selector');
 %% Set parameters
-dimension = 3;          % space dimension
+dimension = 2;          % space dimension
 dataFile = ['data_' sprintf('%d',dimension) 'D_3']; % data file name
 if dimension == 3
     model_3D;               % model file name
 else
     model_2D;
 end
-compensation_exp = 0;     % exponent of compensation, 1 for linear, 2 for quadratic, 3 for cubic...
+compensation_exp = 1;     % exponent of compensation, 1 for linear, 2 for quadratic, 3 for cubic...
 sigmaAvail = 1;         % Sigma is known
+treshold=0.1;           % Treshold percentage (0-1.0) ~ 0-100%
 
 %% Load data
 disp('Loading data...')
@@ -47,30 +48,29 @@ end
 disp('Classification...')
 
 n = length(noise(1,:));
-P = zeros(length(model), 1);
+Eres = zeros(length(model), 1);
+EresData = zeros(length(model), 1);
 
 N = 2*n;
 
 % smallest one is best fitting
 for i = [1:length(model)]
     fn = model{i,1};
-    %if dimension == 2
-        %P(i) = sqrt(sum((fn(ls{i},in_data)-noise).^2)/n);
-        %P(i) = (1/n * sum(sqrt(((fn(ls{i},in_data) - noise).^2)/N)));
-    %else
-        P(i) = model_eval_sq(ls{i},fn,in_data, noise);
-    %end
+
+    %Eres(i) = sqrt(sum((fn(ls{i},in_data)-noise).^2)/n);
+    Eres(i) = model_eval_sq(ls{i},fn,in_data, noise);
+
     d = model{i,2};
     if sigmaAvail == 1
         % sigma is known    
-        EresD = sigma*sqrt(1-d/N);
-        fprintf('\nEres = %f\n', EresD);
+        EresData(i) = sigma*sqrt(1-d/N);
+        fprintf('\nEresData(%d) = %f\n',i, EresData(i));
     else
     
     end
     
     % show them
-    fprintf('P(%d) = %f\n', i, P(i))
+    fprintf('Eres(%d) = %f\n', i, Eres(i))
 end
 
 % Compensate model dimensionality (smaller dimensions are better, smaller P is better)
@@ -84,49 +84,64 @@ wmax = max(w);
 w = w./wmax;
 w = w.^compensation_exp;
 
-% compensate
-Po = P;
-P = P .* w';
+posL = zeros(1, 2);
 
+% METHOD 1
+% compensate
+%EresOrig = Eres;
+Eres1 = Eres .* w';
 % Select best match
-[val, pos] = min(P);
-fn = model{pos,1};
+[val, posL(1)] = min(Eres1);
+
+% METHOD 2
+for i = [1:length(model)]
+    if Eres(i)<EresData(i)*(1-treshold)
+        posL(2) = i;
+        break; 
+    end
+end
 
 %% Show data
 % TODO: expand for another dimensions, not only 3D
-disp('')
-disp('Results')
-disp('=======')
-fprintf('Selected model #%d\n', pos)
-fprintf('Parameters')
-ls{pos}
-vys_rovnice = model{pos,3};
-fprintf('Equation: f(%s) = \n %s\n',promenne, vys_rovnice(ls{pos}));
+for i=[1,2]
+    pos = posL(i);
+    fn = model{pos,1};
+    
+    disp('')
+    fprintf('Results METHOD %d\n', i)
+    disp('================')
+    fprintf('Selected model #%d\n', pos)
+    fprintf('Parameters')
+    ls{pos}
+    vys_rovnice = model{pos,3};
+    fprintf('Equation: f(%s) = \n %s\n',promenne, vys_rovnice(ls{pos}));
 
-if dimension == 2
-    figure;
-    hold on;
-    %plot(in_data, data, '.r')   
-    plot(in_data, noise, '.b')
-    plot(in_data,fn(ls{pos},in_data), '-r')
-    grid on;
-    title('Model fitting, 2D data')
-    xlabel('x')
-    ylabel('y')
-elseif dimension == 3
-    figure;
-    hold on;
-    %plot3(repmat(in_data(1,:),size(in_data,2),1), repmat(in_data(2,:),size(in_data,2),1)', data, '.r')  
-    plot3(repmat(in_data(1,:),size(in_data,2),1), repmat(in_data(2,:),size(in_data,2),1)', noise, '.b')
-    plot3(repmat(in_data(1,:),size(in_data,2),1), repmat(in_data(2,:),size(in_data,2),1)', fn(ls{pos},in_data), '-r')
-    grid on;
-    title('Model fitting, 3D data')
-    xlabel('x')
-    ylabel('y1')
-    ylabel('y2')
-else
-    disp('Unsupported dimension, ending.');
-    return;
+    if dimension == 2
+        figure;
+        hold on;
+        %plot(in_data, data, '.r')   
+        plot(in_data, noise, '.b')
+        plot(in_data,fn(ls{pos},in_data), '-r')
+        grid on;
+        title('Model fitting, 2D data')
+        xlabel('x')
+        ylabel('y')
+    elseif dimension == 3
+        figure;
+        hold on;
+        %plot3(repmat(in_data(1,:),size(in_data,2),1), repmat(in_data(2,:),size(in_data,2),1)', data, '.r')  
+        plot3(repmat(in_data(1,:),size(in_data,2),1), repmat(in_data(2,:),size(in_data,2),1)', noise, '.b')
+        plot3(repmat(in_data(1,:),size(in_data,2),1), repmat(in_data(2,:),size(in_data,2),1)', fn(ls{pos},in_data), '-r')
+        grid on;
+        title('Model fitting, 3D data')
+        xlabel('x')
+        ylabel('y1')
+        ylabel('y2')
+    else
+        disp('Unsupported dimension, ending.');
+        return;
+    end
+    %legend('original','noisy','model')
+    legend('noisy','model')
+
 end
-%legend('original','noisy','model')
-legend('noisy','model')
