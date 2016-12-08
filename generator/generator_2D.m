@@ -31,12 +31,12 @@ n = 1;
 Y(n,:) = polyval(p(n,:), x);
     
 % add noise
-noise = sigma*randn(1,length(x));
+noise = sigma*randn(size(x));
 YN(n, :) = Y(n, :) + noise;
 
-m = mean(YN);
-var = sum((YN-m).^2)/length(YN);
-sigma = sqrt(var);
+%m = mean(YN);
+%var = sum((YN-m).^2)/length(YN);
+%sigma = sqrt(var);
 
 % store data
 csvwrite(strcat('data_',filename,'.csv'),Y);

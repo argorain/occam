@@ -50,23 +50,23 @@ n = length(noise(1,:));
 P = zeros(length(model), 1);
 
 N = 2*n;
-d = dimension;
-if sigmaAvail == 1
-   % sigma is known    
-   EresD = sigma*sqrt(1-d/N)
-else
-    
-end
 
 % smallest one is best fitting
 for i = [1:length(model)]
     fn = model{i,1};
     %if dimension == 2
-        %P(i) = 1/n * sum((fn(ls{i},in_data) - noise).^2);
-    %    P(i) = sqrt(1/n * sum(((fn(ls{i},in_data) - noise).^2)/N));
+        P(i) = sqrt(sum((fn(ls{i},in_data)-noise).^2)/n);
+        %P(i) = (1/n * sum(sqrt(((fn(ls{i},in_data) - noise).^2)/N)));
     %else
-        P(i) = model_eval_sq(ls{i},fn,in_data, noise);
+       % P(i) = model_eval_sq(ls{i},fn,in_data, noise);
     %end
+    d = model{i,2};
+    if sigmaAvail == 1
+        % sigma is known    
+        EresD = sigma*sqrt(1-d/N)
+    else
+    
+    end
     
     % show them
     fprintf('P(%d) = %f\n', i, P(i))
