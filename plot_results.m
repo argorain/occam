@@ -1,4 +1,5 @@
-function plot_results(dim, dataset);
+function plot_results(dim, dataset, visibility);
+set(0,'DefaultFigureVisible',visibility)
 file_in = sprintf('data_%dD_%d.mat',dim,dataset);
 file_processed = sprintf('processed_%dD_%d.mat',dim,dataset);
 dimension = dim;
@@ -11,6 +12,7 @@ load(file_in);
 load(file_processed);
 figure();
 plotcol = {'-r', '+g'};
+titleStr = strcat('Model fitting, ',num2str(dim),'D data, dataset #',num2str(dataset));
 %% Show data
 % TODO: expand for another dimensions, not only 3D
 for i=[1,2]
@@ -33,7 +35,7 @@ for i=[1,2]
         end
         plot(in_data,fn(final_parameters{pos},in_data), plotcol{i})
         grid on;
-        title('Model fitting, 2D data')
+        title(titleStr)
         xlabel('x')
         ylabel('y')
     elseif dimension == 3
@@ -44,14 +46,17 @@ for i=[1,2]
         end
         plot3(repmat(in_data(1,:),size(in_data,2),1), repmat(in_data(2,:),size(in_data,2),1)', fn(final_parameters{pos},in_data), plotcol{i})
         grid on;
-        title('Model fitting, 3D data')
+        title(titleStr)
         xlabel('x')
         ylabel('y1')
-        ylabel('y2')
+        zlabel('y2')
+        view([70 30])
     else
         disp('Unsupported dimension, ending.');
         return;
     end
     %legend('original','noisy','model')
     legend('noisy','model1','model2')
+    filename = strcat('processed_',num2str(dim),'D_',num2str(dataset),'.png');
+    saveas(gcf, filename);
 end
