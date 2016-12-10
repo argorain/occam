@@ -35,9 +35,15 @@ noise = sigma*randn(size(x));
 YN(n, :) = Y(n, :) + noise;
 
 % store data
+data = Y;
+in_data = x;
+noise = YN;
+%{
 csvwrite(strcat('data_',filename,'.csv'),Y);
 csvwrite(strcat('data_',filename,'_n.csv'),YN);
 csvwrite(strcat('data_',filename,'_in.csv'),x);
 csvwrite(strcat('data_',filename,'_sigma.csv'),sigma);
+%}
+save(strcat('data_',filename,'.mat'),'data','noise','in_data','sigma');
 
 fprintf('Generation done.\n');

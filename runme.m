@@ -8,7 +8,7 @@ addpath('generator');
 
 disp('Occams razor model selector');
 %% Set parameters
-dimension = 3;          % space dimension
+dimension = 2;          % space dimension
 dataFile = ['data_' sprintf('%d',dimension) 'D_3']; % data file name
 if dimension == 3
     model_3D;               % model file name
@@ -21,12 +21,15 @@ treshold=0.1;           % Treshold percentage (0-1.0) ~ 0-100%
 
 %% Load data
 disp('Loading data...')
+%{
 data = csvread(strcat(dataFile,'.csv'));
 noise = csvread(strcat(dataFile,'_n.csv'));
 in_data=csvread(strcat(dataFile,'_in.csv'));
 if sigmaAvail ==1
     sigma=csvread(strcat(dataFile,'_sigma.csv'));
 end
+%}
+load([dataFile '.mat']);
 
 %% Model fitting - Maximum Likelihood (Least square)
 % https://onlinecourses.science.psu.edu/stat414/node/191
