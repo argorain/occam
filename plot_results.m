@@ -1,7 +1,7 @@
-function plot_results(dim, dataset, visibility);
+function plot_results(dim, dataset, method, visibility);
 set(0,'DefaultFigureVisible',visibility)
 file_in = sprintf('data_%dD_%d.mat',dim,dataset);
-file_processed = sprintf('processed_%dD_%d.mat',dim,dataset);
+file_processed = sprintf('processedM%d_%dD_%d.mat',method,dim,dataset);
 dimension = dim;
 if dim==2
     model_2D;
@@ -12,7 +12,7 @@ load(file_in);
 load(file_processed);
 figure();
 plotcol = {'-r', '+g'};
-titleStr = strcat('Model fitting, ',num2str(dim),'D data, dataset #',num2str(dataset));
+titleStr = strcat('Model fitting, ',num2str(dim),'D data, dataset #',num2str(dataset), ' Method #',num2str(method));
 %% Show data
 % TODO: expand for another dimensions, not only 3D
 for i=[1,2]
@@ -57,6 +57,6 @@ for i=[1,2]
     end
     %legend('original','noisy','model')
     legend('noisy','model1','model2')
-    filename = strcat('processed_',num2str(dim),'D_',num2str(dataset),'.png');
+    filename = strcat('processedM',num2str(method),'_',num2str(dim),'D_',num2str(dataset),'.png');
     saveas(gcf, filename);
 end

@@ -1,4 +1,4 @@
-function [sigmas, selected_models, final_parameters] = runme_as_fcn(dimension, dataset, include_plots, sigmaAvail)
+function [sigmas, selected_models, final_parameters] = runme_as_fcn(dimension, dataset, include_plots, method)
 % [sigma1, sigma2, selected_model1, selected_model2, final_parameters] = runme_as_fcn(dimension, dataset, include_plots)
 
 disp('Occams razor model selector');
@@ -13,6 +13,13 @@ end
 compensation_exp = 1;     % exponent of compensation, 1 for linear, 2 for quadratic, 3 for cubic...
 %sigmaAvail = 1;         % Sigma is known
 treshold=0.1;           % Treshold percentage (0-1.0) ~ 0-100%
+if(method == 1)
+    sigmaAvail = false;
+elseif(method == 2)
+    sigmaAvail = true;
+elseif(method == 3)
+    sigmaAvail = false;
+end
 
 %% Load data
 disp('Loading data...')
@@ -117,9 +124,16 @@ end
 selected_models = posL;
 final_parameters = ls;
 %% Show data
-% TODO: expand for another dimensions, not only 3D
+if(method == 1)
+    i = 1;
+elseif(method == 2)
+    i = 2;
+elseif(method == 3)
+    i = 2;
+end
+
 if(include_plots)
-for i=[1,2]
+%for i=[1]
     pos = posL(i);
     fn = model{pos,1};
     
@@ -160,5 +174,5 @@ for i=[1,2]
     %legend('original','noisy','model')
     legend('noisy','model')
 
-end
+%end
 end
