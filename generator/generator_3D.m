@@ -1,7 +1,8 @@
+function generator_3D(model,params,dim,sigma)
 %% 3D generator
-close all
-clear all
-clc
+%close all
+%clear all
+%clc
 
 %% Set generator parameters
 
@@ -17,28 +18,28 @@ x = [-10:0.2:10];
 y = [-10:0.2:10];
 
 % filename
-filename = '3D_3';
+filename = [sprintf('%d',dim) 'D_3'];
 
 % std deviation
-sigma = 10000;
+%sigma = 10000;
 
 fprintf('Generating data...\n');
 
 %% Generate data
-[dim,h] = size(p);
-dim = dim + 1; % y-dimensions + x-dimension
-in_data = [y; x];
-Z = zeros(length(y), length(x)); %original would create just a "curve" in space, not surface, as we might want
+%[dim,h] = size(p);
+%dim = dim + 1; % y-dimensions + x-dimension
+in_data = repmat(x,dim-1,1);
+%Z = zeros(length(y), length(x)); %original would create just a "curve" in space, not surface, as we might want
 %Y(1,:) = x;
-ZN = Z;
-Z = polyval(p(2,:), y)'*polyval(p(1,:), x);
+%ZN = Z;
+Z = model(params,in_data);
   
 % add noise
-noise = sigma*randn(length(y),length(x));
+noise = sigma*randn(size(Z));
 ZN = Z + noise;
 
 % store data
-in_data = [x;y];
+%in_data = [x;y];
 data = Z;
 noise = ZN;
 %{
