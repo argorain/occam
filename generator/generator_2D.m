@@ -15,7 +15,7 @@ x = [-10:0.2:10];
 filename = '2D_3';
 
 % std deviation
-sigma = 1000;
+sigma_data = 1000;
 
 fprintf('Generating data...\n');
 

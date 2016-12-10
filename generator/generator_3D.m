@@ -1,5 +1,12 @@
-function generator_3D(model,params,dim,sigma)
+function generator_3D(model,params,dim,sigma_data,dataset)
 %% 3D generator
+% generator_3D(model,params,dim,sigma_data,dataset)
+% model - model fcn
+% params - intended parameters
+% dim - dimension of the model
+% sigma_data - intended sigma for generated noise
+% dataset - save this data as number dataset
+
 %close all
 %clear all
 %clc
@@ -18,7 +25,7 @@ x = [-10:0.2:10];
 y = [-10:0.2:10];
 
 % filename
-filename = [sprintf('%d',dim) 'D_3'];
+filename = sprintf('%dD_%d',dim,dataset);
 
 % std deviation
 %sigma = 10000;
@@ -35,7 +42,7 @@ in_data = repmat(x,dim-1,1);
 Z = model(params,in_data);
   
 % add noise
-noise = sigma*randn(size(Z));
+noise = sigma_data*randn(size(Z));
 ZN = Z + noise;
 
 % store data
@@ -48,6 +55,6 @@ csvwrite(strcat('data_',filename,'.csv'),Z);
 csvwrite(strcat('data_',filename,'_n.csv'),ZN);
 csvwrite(strcat('data_',filename,'_sigma.csv'),sigma);
 %}
-save(['data_' filename '.mat'],'in_data','data','noise','sigma');
+save(['data_' filename '.mat'],'in_data','data','noise','sigma_data');
 
 fprintf('Generation done.\n');
