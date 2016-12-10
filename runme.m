@@ -8,7 +8,7 @@ addpath('generator');
 
 disp('Occams razor model selector');
 %% Set parameters
-dimension = 2;          % space dimension
+dimension = 3;          % space dimension
 dataFile = ['data_' sprintf('%d',dimension) 'D_3']; % data file name
 if dimension == 3
     model_3D;               % model file name
