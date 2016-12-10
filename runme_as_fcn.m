@@ -1,4 +1,4 @@
-function [sigmas, selected_models, final_parameters] = runme_as_fcn(dimension, dataset, include_plots)
+function [sigmas, selected_models, final_parameters] = runme_as_fcn(dimension, dataset, include_plots, sigmaAvail)
 % [sigma1, sigma2, selected_model1, selected_model2, final_parameters] = runme_as_fcn(dimension, dataset, include_plots)
 
 disp('Occams razor model selector');
@@ -11,7 +11,7 @@ else
     model_2D;
 end
 compensation_exp = 1;     % exponent of compensation, 1 for linear, 2 for quadratic, 3 for cubic...
-sigmaAvail = 1;         % Sigma is known
+%sigmaAvail = 1;         % Sigma is known
 treshold=0.1;           % Treshold percentage (0-1.0) ~ 0-100%
 
 %% Load data
