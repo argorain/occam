@@ -27,6 +27,7 @@ plotcol = {'-r', '+g', '-.b'};
 titleStr = strcat('Model fitting, ',num2str(dim),'D data, dataset #',num2str(dataset), ' Method #',num2str(methods));
 %% Show data
 % TODO: expand for another dimensions, not only 3D
+selmod = [0,0,0];
 for i=methods
     pos = sel_models(i);
     if i==1
@@ -43,12 +44,13 @@ for i=methods
     final_parameters{pos}
     vys_rovnice = model{pos,3};
     fprintf('Equation: f(%s) = \n %s\n',promenne, vys_rovnice(final_parameters{pos}));
-
+    selmod(i) = pos;
+    
     if dimension == 2
         hold on;
         %plot(in_data, data, '.r')   
         if i==1
-            plot(in_data, noise, '.c')
+            plot(in_data, noise, '.m')
         end
         plot(in_data,fn(final_parameters{pos},in_data), plotcol{i})
         grid on;
@@ -58,7 +60,7 @@ for i=methods
         hold on;
         %plot3(repmat(in_data(1,:),size(in_data,2),1), repmat(in_data(2,:),size(in_data,2),1)', data, '.r')  
         if i==1
-            plot3(repmat(in_data(1,:),size(in_data,2),1), repmat(in_data(2,:),size(in_data,2),1)', noise, '.c')
+            plot3(repmat(in_data(1,:),size(in_data,2),1), repmat(in_data(2,:),size(in_data,2),1)', noise, '.m')
         end
         plot3(repmat(in_data(1,:),size(in_data,2),1), repmat(in_data(2,:),size(in_data,2),1)', fn(final_parameters{pos},in_data), plotcol{i})
         grid on;
@@ -73,6 +75,6 @@ for i=methods
     %legend('original','noisy','model')
 end
 title(titleStr)
-legend('noisy','model1','model2','model3')
+legend('noisy',strcat('method 1, model ',num2str(selmod(1))),strcat('method 3, model ',num2str(selmod(2))),strcat('method 2, model ',num2str(selmod(3))))
 filename = strcat('processedM',num2str(methods),'_',num2str(dim),'D_',num2str(dataset),'.png');
 saveas(gcf, filename);

@@ -63,9 +63,9 @@ fprintf('Processing results..\n');
     for it=1:req_tests
        plot_results(2,it,[1 2 3],'off'); 
     end
-%     for it=1:req_tests
-%        plot_results(3,it,method,'off'); 
-%     end
+    for it=1:req_tests
+       plot_results(3,it,[1 2 3],'off'); 
+    end
 %end
 
 %% Confusion matrix
