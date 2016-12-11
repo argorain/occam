@@ -85,7 +85,7 @@ for method = [1,2,3] %1~M1+M3, 2~M1+M2
             load(sprintf('processedM%d_%dD_%d',1,dim,it))
             smodel = selected_models(2);
         end
-        CM2(mmod(it,models2),smodel, method) = CM2(mmod(it,models2),smodel, method) + 1;
+        CM2(smodel,mmod(it,models2), method) = CM2(smodel,mmod(it,models2), method) + 1;
     end
 end
 CM2
@@ -106,7 +106,7 @@ for method = [1,2,3]
             load(sprintf('processedM%d_%dD_%d',1,dim,it))
             smodel = selected_models(2);
         end
-        CM3(mmod(it,models3),smodel, method) = CM3(mmod(it,models3),smodel, method) + 1;
+        CM3(smodel,mmod(it,models3), method) = CM3(smodel,mmod(it,models3), method) + 1;
     end
 end
 CM3
