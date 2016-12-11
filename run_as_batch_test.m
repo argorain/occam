@@ -73,12 +73,16 @@ fprintf('Processing results..\n');
 CM2 = zeros(models2, models2, 3);
 dim = 2;
 smodel = 1;
-for method = [1,2,3]
-    for it=1:req_tests
-        load(sprintf('processedM%d_%dD_%d',method,dim,it))
+for method = [1,2,3] %1~M1+M3, 2~M1+M2
+    for it=1:req_tests       
         if(method == 1)
+            load(sprintf('processedM%d_%dD_%d',1,dim,it))
             smodel = selected_models(1);
-        elseif(method == 2 || method == 3)
+        elseif(method == 2)
+            load(sprintf('processedM%d_%dD_%d',2,dim,it))
+            smodel = selected_models(2);
+        elseif(method == 3) 
+            load(sprintf('processedM%d_%dD_%d',1,dim,it))
             smodel = selected_models(2);
         end
         CM2(mmod(it,models2),smodel, method) = CM2(mmod(it,models2),smodel, method) + 1;
@@ -92,10 +96,14 @@ dim = 3;
 smodel = 1;
 for method = [1,2,3]
     for it=1:req_tests
-        load(sprintf('processedM%d_%dD_%d',method,dim,it))
         if(method == 1)
+            load(sprintf('processedM%d_%dD_%d',1,dim,it))
             smodel = selected_models(1);
-        elseif(method == 2 || method == 3)
+        elseif(method == 2)
+            load(sprintf('processedM%d_%dD_%d',2,dim,it))
+            smodel = selected_models(2);
+        elseif(method == 3) 
+            load(sprintf('processedM%d_%dD_%d',1,dim,it))
             smodel = selected_models(2);
         end
         CM3(mmod(it,models3),smodel, method) = CM3(mmod(it,models3),smodel, method) + 1;
