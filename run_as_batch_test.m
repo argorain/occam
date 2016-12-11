@@ -6,7 +6,7 @@ addpath('fun');
 addpath('model');
 addpath('generator');
 
-req_tests = 20;
+req_tests = 5;
 fprintf('Generating data..\n');
 %% generate 2D data
 dim = 2;
@@ -40,7 +40,7 @@ end
 
 %% Evaluate
 fprintf('Evaluating data..\n');
-for method = [1,2,3]
+for method = [1,2]
     % eval 2D 
     dim = 2;
     for it=1:req_tests
@@ -59,14 +59,14 @@ end
 %% Process results
 fprintf('Processing results..\n');
 
-for method = [1,2,3]
+%for method = [1,2,3]
     for it=1:req_tests
-       plot_results(2,it,method,'off'); 
+       plot_results(2,it,[1 2 3],'off'); 
     end
 %     for it=1:req_tests
 %        plot_results(3,it,method,'off'); 
 %     end
-end
+%end
 
 %% Confusion matrix
 % 2D
